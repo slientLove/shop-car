@@ -66,12 +66,11 @@
           </div>
         </div>
       </transition>
-
     </div>
 </template>
 <script>
 //  import axios from 'axios'
-import start from '../../common/start.vue'
+import start from '../start/start.vue';
   export default {
     name: 'head',
     props: {

@@ -79,7 +79,6 @@
           totallPrice () {
             let totall = 0;          // 计算总的金额ss
             this.selectedFoods.forEach( food => totall+=food.count*food.price);
-            console.log(totall);
             return totall;
           },
           totallCount () {          // 计算总的数量

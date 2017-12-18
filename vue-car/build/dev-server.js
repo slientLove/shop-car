@@ -56,7 +56,7 @@ const devMiddleware = require('webpack-dev-middleware')(compiler, {
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
-  heartbeat: 2000
+  heartbeat: 1000
 })
 // force page reload when html-webpack-plugin template changes
 // currently disabled until this is resolved:

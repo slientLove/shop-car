@@ -5,7 +5,7 @@
           <ul>
               <!-- 数据处理要精准 -->
               <li v-for="(item, index) in goods.data" class="menu-item" v-if="item"
-                  ref="menuList" :class="{'current':_currentIndex===index}"  @click='_selectMenu(index,$event)'>
+                  ref="menuList" :class="{'current':_currentIndex===index}"  @click='_selectMenu(index,$event)' :key="index">
                   <span class="menu-text">
                      <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
                   </span>
@@ -72,11 +72,12 @@
        _currentIndex () {         // 计算当前位置的索引
            for(let i=0;i<this.listHeight.length;i++){
              let height1 = this.listHeight[i];
-             let height2 = this.listHeight[i+1];
+             let height2 = this.listHeight[ i+1 ];
              // 商品不是最后一个的时候
-             if(!height2||(height1<=this.scrollY&&this.scrollY<=height2)){
+             if(!height2||(this.scrollY>=height1&&this.scrollY<=height2)){
                   this.followIndex(i);
-                   return i;
+                   console.log(i);
+                  return i;
              }
            }
            return 0;        // 没有数据就返回0
@@ -86,14 +87,11 @@
          for( let foods in this.goods.data){
               let food = this.goods.data[foods].foods;
                for(let i in food){
-                 console.log(food[i]);
-//                 Vue.set(food[i],'count','')
                  if(food[i].count){
                    arr.push(food[i]);
                  }
                }
          }
-         console.log( arr );
          return arr;
       }
     },
@@ -103,9 +101,9 @@
           this.goods = response.data ;
           this.$nextTick( () =>{          // 调用这个方法可以在数据发生变化后，重新渲染DOM,不然这个方法可能不起作用
             this._initScroll();
+            this._calculateHeight();     // 初始化的时候计算整个右侧列表的高度
           })
         }
-        console.log(this.goods)
       });
     },
     methods: {
@@ -124,14 +122,16 @@
            }
         })
       },
-      _calculateHeight () {         // 获取一系列高度
+       _calculateHeight () {         // 获取一系列高度
          let foodLists = this.$refs.foodList;
          let height = 0;
          this.listHeight.push(height);
          for(let i=0;i<foodLists.length;i++){
-           height+=foodLists[i].clientHeight;
+           let oHeight = foodLists[i];
+           height+=oHeight.clientHeight;
            this.listHeight.push(height);
          }
+         console.log( this.listHeight );
       },
        followIndex (index) {
          let menuLists = this.$refs.menuList;
@@ -217,10 +217,11 @@
     background:#f3f5f7 ;
   }
   .food-item{
+    border-bottom: solid 1px #f3f5f7;
     display: flex;
     margin: 18px;
     padding-bottom: 18px;
-    background: rgba(7,17,27,0.1);
+    /* background: rgba(7,17,27,0.1); */
     position: relative;
   }
   .food-item:last-child{
@@ -232,9 +233,11 @@
     margin-right: 10px;
   }
   .food-content{
+    padding-left: 10px;
     flex: 1;
   }
   .food-content  .name{
+    text-align: left;
     margin: 2px 0 8px 0;
     height: 14px;
     line-height: 14px;

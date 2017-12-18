@@ -8,7 +8,7 @@
       <router-link to="/seller">商家</router-link>
     </div>
     <keep-alive>          <!-- 保证每个组件的状态不被改变 -->
-      <router-view :seller="seller">        <!-- 组件通信，需要在这里绑定值 --->
+      <router-view :seller="seller">   <!-- 组件通信，需要在这里绑定值 -->  
       </router-view>
     </keep-alive>
   </div>
